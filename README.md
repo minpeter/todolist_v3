@@ -9,6 +9,7 @@ Written in just under 200 lines of code
 ## Usage
 
 ```
+$ go mod download
 $ go run main.go
 ```
 
