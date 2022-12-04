@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <style>
+    * {
+      text-align: center;
+    }
+
+    li {
+      list-style: none;
+      border: 1px solid black;
+      width: 200px;
+      padding: 10px 10px 5px 5px;
+      margin: 5px auto;
+    }
+
+    ul {
+      padding: 0;
+    }
+  </style>
+
+  <h2>TODO LIST v3</h2>
+
+  <input type="text" id="todo_input" placeholder="add new todo">
+  <button id="add_btn">Add</button>
+
+
+  <ul id="todo_list"></ul>
+
+  <script>
+    const todoInput = document.getElementById('todo_input');
+    const addBtn = document.getElementById('add_btn');
+    const todoList = document.getElementById('todo_list');
+
+    fetch('/todo')
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.result);
+        res.result.todo.forEach(todo => {
+          const li = document.createElement('li');
+          li.innerText = todo.todo;
+          li.id = todo.id;
+          todoList.appendChild(li);
+        })
+      });
+
+    addBtn.addEventListener('click', addTodo);
+    todo_input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        addTodo();
+      }
+    });
+
+    function addTodo() {
+      const todo = todoInput.value;
+      if (todo) {
+        const li = document.createElement('li');
+
+        fetch(`/todo?todo=${todo}`, {
+          method: 'POST',
+        })
+          .then(res => res.json())
+          .then(res => {
+            console.log(res.result);
+
+            li.innerText = res.result.item;
+            li.id = res.result.id;
+          })
+          .catch(err => {
+            console.log(err);
+          })
+
+        todoList.appendChild(li);
+
+        todoInput.value = '';
+      }
+    }
+
+    todoList.addEventListener('click', function (e) {
+      const li = e.target;
+      if (li.tagName === 'LI') {
+        fetch(`/todo?id=${li.id}`, {
+          method: 'DELETE',
+        })
+          .then(res => res.json())
+          .then(res => {
+            console.log(res.result);
+            li.remove();
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      }
+    });
+
+  </script>
+
+</body>
+
+</html>
