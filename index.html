@@ -73,12 +73,11 @@
 
             li.innerText = res.result.item;
             li.id = res.result.id;
+            todoList.appendChild(li);
           })
           .catch(err => {
             console.log(err);
           })
-
-        todoList.appendChild(li);
 
         todoInput.value = '';
       }

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type todo struct {
@@ -16,6 +17,12 @@ var lastId int = 0
 
 func main() {
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://todolist",
+		AllowMethods: "GET, POST, DELETE, HEAD, OPTIONS",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	var todolist []todo
 
