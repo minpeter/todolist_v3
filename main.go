@@ -19,7 +19,7 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://todo.list",
+		AllowOrigins: "http://todo.list, http://todo.list:3000",
 		AllowMethods: "GET, POST, DELETE, HEAD, OPTIONS",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
